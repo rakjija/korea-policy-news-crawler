@@ -2,16 +2,10 @@
   "folders": [
     {
       "path": "."
-    },
-    {
-      "path": "airflow"
-    },
-    {
-      "path": "minio"
-    },
-    {
-      "path": "postgresql"
     }
   ],
-  "settings": {}
+  "settings": {
+    "python.analysis.extraPaths": ["${workspaceFolder}/airflow/plugins"],
+    "python.defaultInterpreterPath": "${workspaceFolder}/airflow/.venv/bin/python"
+  }
 }
