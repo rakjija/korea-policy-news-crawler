@@ -1,0 +1,10 @@
+include:
+  - './minio/docker-compose.yaml'
+  - './postgresql/docker-compose.yaml'
+  - './elk/docker-compose.yaml'
+  - './airflow/docker-compose.yaml'
+
+networks:
+  korea-policy-news-net:
+    driver: bridge
+    name: korea-policy-news-net
