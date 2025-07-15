@@ -1,3 +1,17 @@
+# Airflow 관련
+airflow.db
+airflow-webserver.pid
+logs/
+dags/__pycache__/
+plugins/__pycache__/
+dags/*.pyc
+plugins/*.pyc
+
+# Airflow 설정 파일 (환경에 따라)
+airflow.cfg
+unittests.cfg
+webserver_config.py
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
