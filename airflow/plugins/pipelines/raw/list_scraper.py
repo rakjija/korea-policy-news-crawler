@@ -9,9 +9,9 @@ logger = logging.getLogger(__name__)
 
 def scrap_news_list(
     url: str,
-    startDate="2025-07-11",  # 사용 가능한 가장 과거 일자: 1970-01-01
-    endDate="2025-07-14",
-):
+    start_date: str,  # 사용 가능한 가장 과거 일자: 1970-01-01
+    end_date: str,
+) -> list[str]:
     news_list = []
     page = 1
     while True:
@@ -19,8 +19,8 @@ def scrap_news_list(
             # form#mainForm
             form_data = {
                 "pageIndex": page,
-                "startDate": startDate,
-                "endDate": endDate,
+                "startDate": start_date,
+                "endDate": end_date,
                 "period": "direct",
             }
             res = httpx.post(url, data=form_data)
