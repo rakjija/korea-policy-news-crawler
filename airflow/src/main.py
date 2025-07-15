@@ -61,6 +61,8 @@ async def main_async():
 
 def main():
     asyncio.run(main_async())
+
+    # __TEST
     # result = asyncio.run(
     #     scrap_news(
     #         "https://www.korea.kr/news/reporterView.do?newsId=148942535&pWise=sub&pWiseSub=I1"
