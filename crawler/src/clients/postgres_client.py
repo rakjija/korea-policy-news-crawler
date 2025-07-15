@@ -1,3 +1,4 @@
+import json
 import logging
 
 import asyncpg
@@ -62,7 +63,7 @@ class PostgresClient:
             raise
 
         async with self.pool.acquire() as conn:
-            images_jsonb = [img.model_dump() for img in news_item.images]
+            images_jsonb = [json.dumps(img.model_dump()) for img in news_item.images]
             try:
                 await conn.execute(
                     """
