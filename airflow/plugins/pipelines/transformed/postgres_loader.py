@@ -7,7 +7,7 @@ from models.news import News
 logger = logging.getLogger(__name__)
 
 
-async def load_to_dw(
+async def load_transforms_to_postgres(
     news_items: list[News],
     pg_host: str,
     pg_port: str,
