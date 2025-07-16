@@ -2,36 +2,42 @@ import logging
 from datetime import datetime
 
 from clients.minio_client import MinioClient
-from pipelines.raw.raw_scraper import scrap_raw_html_batch
+# from pipelines.raw.raw_scraper import scrap_raw_html_batch # ⬅️ 더 이상 내부에서 호출하지 않으므로 제거
 
 logger = logging.getLogger(__name__)
 
 
 async def load_to_dl(
-    news_urls: list[str],
+    minio_endpoint: str,
+    minio_bucket_name: str,
+    minio_access_key: str,
+    minio_secret_key: str,
+    scraped_raw_data: list[tuple[bytes, str, int]], # ⬅️ 인자명과 타입 힌트 변경
     batch_size: int = 5,
     delay_between_batches: int = 2,
 ):
+    """
+    스크랩된 Raw HTML 데이터를 MinIO(Data Lake)에 저장합니다.
+    """
     # MinIO 클라이언트 초기화
     minio_client = MinioClient(
-        endpoint="localhost:9000",  # TODO: 환경 변수화
-        access_key="ROOTNAME",  # TODO: 환경 변수화
-        secret_key="CHANGEME123",  # TODO: 환경 변수화
+        endpoint=minio_endpoint,
+        access_key=minio_access_key,
+        secret_key=minio_secret_key,
         secure=False,
     )
-    minio_bucket_name = "raw-news"  # TODO: 환경 변수화
 
-    # Raw HTML 배치 스크랩
-    scraped_raw_data = await scrap_raw_html_batch(
-        news_urls,
-        batch_size,
-        delay_between_batches,
-    )
+    # ⬅️ scrap_raw_html_batch 호출 로직을 제거합니다.
+    # scraped_raw_data = await scrap_raw_html_batch(
+    #     news_urls,
+    #     batch_size,
+    #     delay_between_batches,
+    # )
 
     # Raw HTML -> MinIO
     successfully_uploaded_count = 0
     minio_uploaded_objects = []
-    for raw_html_content, original_url, news_id in scraped_raw_data:
+    for raw_html_content, original_url, news_id in scraped_raw_data: # ⬅️ 전달받은 scraped_raw_data를 사용합니다.
         # 현재 날짜 추출
         now = datetime.now()
         year = now.year

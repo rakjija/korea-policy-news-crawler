@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger(__name__)
 
 
-def scrap_news_list(
+def scrap_urls(
     url: str,
     start_date: str,  # 사용 가능한 가장 과거 일자: 1970-01-01
     end_date: str,
