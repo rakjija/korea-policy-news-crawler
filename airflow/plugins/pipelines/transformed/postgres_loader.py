@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 async def load_transforms_to_postgres(
-    news_items: list[News],
+    news_items: list[str],
     pg_host: str,
     pg_port: str,
     pg_user: str,
@@ -42,7 +42,9 @@ async def load_transforms_to_postgres(
 
         tasks = []
         for news_item in batch_news_items:
-            tasks.append(pg_client.insert_news(news_item=news_item))
+            tasks.append(
+                pg_client.insert_news(news_item=News.model_validate_json(news_item))
+            )
 
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -50,7 +52,7 @@ async def load_transforms_to_postgres(
             news_item = batch_news_items[j]
             if isinstance(result, Exception):
                 logger.error(
-                    f"Error inserting news ID {news_item.id} into PostgreSQL: {result}"
+                    f"Error inserting news ID {News.model_validate_json(news_item).id} into PostgreSQL: {result}"
                 )
             else:
                 successfully_loaded_count += 1

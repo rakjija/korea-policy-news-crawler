@@ -3,7 +3,6 @@ import logging
 from urllib.parse import parse_qs, urlparse
 
 import httpx
-
 from utils.headers_generator import get_headers
 
 logger = logging.getLogger(__name__)
@@ -37,11 +36,11 @@ async def scrap_raw_html(url: str, client: httpx.AsyncClient):
         logger.error("News ID not found in URL.")
         raise
 
-    return res.content, url, news_id
+    return res.text, url, news_id
 
 
 async def scrap_raw_html_batch(
-    news_urls: list[str],
+    page_urls: list[str],
     batch_size: int = 5,
     delay_between_batches: int = 2,
 ):
@@ -51,15 +50,15 @@ async def scrap_raw_html_batch(
     """
 
     logger.info(
-        f"Starting batch processing of {len(news_urls)} news articles, {batch_size} per batch."
+        f"Starting batch processing of {len(page_urls)} news articles, {batch_size} per batch."
     )
     processed_articles = []
 
     async with httpx.AsyncClient(
         headers=get_headers(referer="https://www.korea.kr"),
     ) as client:
-        for i in range(0, len(news_urls), batch_size):
-            batch_urls = news_urls[i : i + batch_size]
+        for i in range(0, len(page_urls), batch_size):
+            batch_urls = page_urls[i : i + batch_size]
             logger.info(
                 f"Processing batch {i // batch_size + 1}: {len(batch_urls)} articles."
             )
@@ -73,7 +72,7 @@ async def scrap_raw_html_batch(
                 else:
                     processed_articles.append(result)
 
-            if i + batch_size < len(news_urls):
+            if i + batch_size < len(page_urls):
                 logger.info(
                     f"Waiting for {delay_between_batches} seconds until next batch..."
                 )

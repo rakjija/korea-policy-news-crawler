@@ -14,7 +14,7 @@ from pipelines.transformed.raw_transformer import transform_raws
 
 logger = logging.getLogger(__name__)
 
-env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+env_path = Path(__file__).resolve().parent.parent.parent / ".local.env"
 load_dotenv(dotenv_path=env_path)
 
 

@@ -129,15 +129,15 @@ def _parse_raw_html(
 
 async def transform_raws(
     raw_data: list[
-        tuple[bytes, dict, dict]
+        tuple[str, dict, dict]
     ],  # (raw_html_content, metadata, original_object_info)
-) -> list[News]:
+) -> list[str]:
     """
     다운로드된 Raw HTML 데이터를 News 객체로 변환합니다.
     """
     logger.info("Starting transformation of downloaded HTML.")
 
-    transforms = []
+    transforms: list[str] = []
 
     for raw_html_content, metadata, original_object_info in raw_data:
         news_id = original_object_info["news_id"]
@@ -161,11 +161,11 @@ async def transform_raws(
 
         try:
             parsed_data: News = _parse_raw_html(
-                raw_html_content=raw_html_content,
+                raw_html_content=raw_html_content.encode("utf-8"),
                 original_url=original_url,
                 crawled_at=crawled_at_from_minio,
             )
-            transforms.append(parsed_data)
+            transforms.append(parsed_data.model_dump_json())
         except Exception as e:
             logger.error(f"Error transforming news ID {news_id}: {e}")
 

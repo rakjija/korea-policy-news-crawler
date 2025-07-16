@@ -14,9 +14,7 @@ async def extract_raws_from_minio(
     minio_objects_to_extract: list[dict],
     batch_size: int = 5,
     delay_between_batches: int = 1,
-) -> list[
-    tuple[bytes, dict, dict]
-]:  # (raw_html_content, metadata, original_object_info)
+) -> list[tuple[str, dict, dict]]:  # (raw_html_content, metadata, original_object_info)
     """
     MinIO에 저장된 Raw HTML 파일을 다운로드합니다.
     """
@@ -59,7 +57,7 @@ async def extract_raws_from_minio(
                 raw_html_content, metadata = result
 
                 extracted_raw_data.append(
-                    (raw_html_content, metadata, obj)
+                    (raw_html_content.decode("utf-8"), metadata, obj)
                 )  # 원본 객체 정보도 함께 반환
 
         if i + batch_size < len(minio_objects_to_extract):

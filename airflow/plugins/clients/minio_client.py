@@ -28,7 +28,7 @@ class MinioClient:
         data: bytes,
         metadata: dict,
         content_type: str = "application/octet-stream",
-    ) -> bool:
+    ) -> None:
         try:
             # 버킷이 없을 경우 생성
             if not self.client.bucket_exists(bucket_name):
@@ -45,13 +45,12 @@ class MinioClient:
             logger.info(
                 f"File '{object_name}' uploaded to bucket '{bucket_name}' successfully."
             )
-            return True
         except S3Error as e:
             logger.error(f"S3 Error during MinIO upload: {e}")
-            return False
+            raise
         except Exception as e:
             logger.error(f"An unexpected error occurred during MinIO upload: {e}")
-            return False
+            raise
 
     async def download_file(
         self,
