@@ -13,6 +13,12 @@ services:
       - '9300:9300'
     networks:
       - korea-policy-news-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
 
   logstash:
     image: logstash:8.18.3
