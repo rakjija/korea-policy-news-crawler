@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        input[type="text"], input[type="date"], button { padding: 8px; margin: 5px; }
+        .news-item { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; }
+        .news-item h3 { margin-top: 0; }
+        .pagination button { margin: 0 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><%= title %></h1>
+
+        <div>
+            <input type="text" id="searchQuery" placeholder="검색어 입력">
+            <input type="date" id="startDate">
+            <input type="date" id="endDate">
+            <button onclick="searchNews()">검색</button>
+        </div>
+
+        <div id="newsResults">
+            <!-- 뉴스 검색 결과 -->
+        </div>
+
+        <div class="pagination">
+            <button onclick="prevPage()" id="prevPageBtn" disabled>이전</button>
+            <span id="currentPage">1</span> / <span id="totalPages">1</span>
+            <button onclick="nextPage()" id="nextPageBtn">다음</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        const pageSize = 10;
+
+        async function searchNews() {
+            const query = document.getElementById('searchQuery').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            const params = new URLSearchParams({
+                page: currentPage,
+                size: pageSize,
+            });
+            if (query) params.append('q', query);
+            if (startDate) params.append('start_date', startDate);
+            if (endDate) params.append('end_date', endDate);
+
+            const response = await fetch(`/api/news?${params.toString()}`);
+            const data = await response.json();
+
+            const newsResultsDiv = document.getElementById('newsResults');
+            newsResultsDiv.innerHTML = '';
+
+            if (data.data && data.data.length > 0) {
+                data.data.forEach(news => {
+                    const newsItem = document.createElement('div');
+                    newsItem.className = 'news-item';
+                    newsItem.innerHTML = `
+                        <h3>${news.title}</h3>
+                        <p><strong>발행처:</strong> ${news.publisher}</p>
+                        <p><strong>발행일:</strong> ${new Date(news.published_at).toLocaleDateString()}</p>
+                        <p>${news.contents.substring(0, 200)}...</p>
+                        <p><a href="${news.url}" target="_blank">원문 보기</a></p>
+                    `;
+                    newsResultsDiv.appendChild(newsItem);
+                });
+            } else {
+                newsResultsDiv.innerHTML = '<p>검색 결과가 없습니다.</p>';
+            }
+
+            document.getElementById('currentPage').textContent = currentPage;
+            const totalPages = Math.ceil(data.total / pageSize);
+            document.getElementById('totalPages').textContent = totalPages;
+
+            document.getElementById('prevPageBtn').disabled = currentPage === 1;
+            document.getElementById('nextPageBtn').disabled = currentPage === totalPages || totalPages === 0;
+        }
+
+        function prevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                searchNews();
+            }
+        }
+
+        function nextPage() {
+            const totalPages = parseInt(document.getElementById('totalPages').textContent);
+            if (currentPage < totalPages) {
+                currentPage++;
+                searchNews();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', searchNews);
+    </script>
+</body>
+</html>

@@ -3,8 +3,8 @@ include:
   - './postgresql/docker-compose.yaml'
   - './elk/docker-compose.yaml'
   - './airflow/docker-compose.yaml'
+  - './web-app/docker-compose.yaml'
 
 networks:
   korea-policy-news-net:
     driver: bridge
-    name: korea-policy-news-net

@@ -1,0 +1,12 @@
+services:
+  web-app:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      - ELASTICSEARCH_HOST=http://elasticsearch:9200
+      - ELASTICSEARCH_INDEX=korea-policy-news-*
+    networks:
+      - korea-policy-news-net
+    depends_on:
+      - elasticsearch
