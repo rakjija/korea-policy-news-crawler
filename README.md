@@ -162,6 +162,7 @@ docker compose ps
   Web Application은 구축된 데이터 파이프라인의 최종 결과물을 사용자에게 제공하는 인터페이스 역할을 수행합니다. 사용자는 웹 애플리케이션을 통해 Elasticsearch에 인덱싱된 뉴스 데이터를 검색하고 탐색할 수 있습니다.
 - **Node.js + Express + EJS + TS**
   웹 애플리케이션은 Node.js 런타임 환경에서 Express.js 프레임워크를 기반으로 백엔드를 구현하였습니다. 프론트엔드는 EJS(Embedded JavaScript) 템플릿 엔진을 활용하여 서버 사이드 렌더링 방식으로 구성하였으며, Elasticsearch와의 통신은 공식 JavaScript 클라이언트인 @elastic/elasticsearch 라이브러리를 통해 처리하였습니다.
+  ![alt text](webapp.png)
 
 # 향후 개선 계획
 
