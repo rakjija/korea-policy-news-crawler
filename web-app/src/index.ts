@@ -37,6 +37,9 @@ app.get("/api/news", async (req, res) => {
 					filter: [],
 				},
 			},
+			collapse: {
+				field: "title.keyword",
+			},
 			sort: [{ published_at: { order: "desc" } }], // 최신 뉴스부터 정렬
 		};
 
