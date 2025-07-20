@@ -24,6 +24,44 @@
 
 ![alt text](architecture.png)
 
+# 디렉토리 구조
+
+```text
+├── .example.env                # 환경 변수 예시
+├── .local.env                  # 로컬 개발용 환경 변수
+├── docker-compose.yaml         # 전체 서비스 통합 Compose 파일
+├── airflow/
+│   ├── dags/
+│   │   └── korea_policy_news_crawling_pipeline.py  # 정책 뉴스 크롤링 DAG
+│   ├── plugins/
+│   │   ├── clients/            # MinIO, PostgreSQL 클라이언트
+│   │   ├── crawler/            # 웹 크롤러 모듈
+│   │   ├── models/             # 데이터 모델 정의
+│   │   ├── pipelines/          # 파이프라인 처리 모듈
+│   │   └── utils/              # 유틸 함수 모음
+│   ├── logs/                   # Airflow 로그
+│   ├── config/                 # 설정 파일 (airflow.cfg 등)
+│   ├── Dockerfile              # Airflow용 Dockerfile
+│   └── docker-compose.yaml     # Airflow 개별 Compose 파일
+├── elk/
+│   ├── docker-compose.yaml     # ELK Compose 파일
+│   ├── config/
+│   │   └── logstash.conf       # Logstash 설정
+│   └── jdbc-driver/            # PostgreSQL JDBC 드라이버
+├── minio/
+│   └── docker-compose.yaml     # MinIO Compose 파일
+├── postgresql/
+│   └── docker-compose.yaml     # PostgreSQL Compose 파일
+└── web-app/
+    ├── src/
+    │   ├── index.ts            # 메인 로직
+    │   └── views/
+    │       └── index.ejs       # EJS 템플릿
+    ├── package.json            # Node 프로젝트 설정
+    ├── Dockerfile              # web-app용 Dockerfile
+    └── docker-compose.yaml     # web-app Compose 파일
+```
+
 # 실행 방법
 
 ### 1. 프로젝트 클론
